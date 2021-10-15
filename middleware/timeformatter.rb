@@ -1,25 +1,38 @@
 class TimeFormatter
 
-  def initialize
+  FORMAT = {"year"=> "%Y", "month"=> "%m", "day"=>"%d", "hour"=>"%H", "minute"=>"%M", "second"=>"%S"}
+
+  attr_reader :false_result
+
+  def initialize(query)
+    @query = query
   end
 
-  def time_formatter(format)
-    str = ''
-    format.each do |data|
-      if data == "year"
-        str = "%Y-"
-      elsif data == "month"
-        str += (Time.now.month.to_s + '-') 
-      elsif data == "day"
-        str += (Time.now.day.to_s + '-')
-      elsif data == "hour"
-        str += (Time.now.hour.to_s + '-')
-      elsif data == "minute"
-        str += (Time.now.min.to_s + '-')
-      elsif data == "second"
-        str += (Time.now.sec.to_s + '-')
+  def success?
+    @false_result.empty?
+  end
+
+  def call
+    @query = @query[6,50]
+    time_params = @query.split("%2C")
+    @false_result = time_params - FORMAT.keys 
+    if @false_result.empty?
+      @string_array = []
+      result = time_params & FORMAT.keys
+      FORMAT.each do |key,val|
+        if result.include?(key)
+          @string_array << val
+        end
       end
     end
-    str[0...-1]
   end
+
+  def time
+    Time.now.strftime "#{time_content}"
+  end
+
+  def time_content
+    @string_array.join(' ')
+  end
+
 end
