@@ -1,20 +1,35 @@
 class App
   
   def call(env)
-    [status, headers, body]
+    handle_request(env['REQUEST_PATH'], env['QUERY_STRING'])
   end
 
   private
 
-  def status
-    200
+  def send(status, body)
+    response = Rack::Response.new
+    [response.status = status, response.headers, response.body = [body]]
   end
 
-  def headers
-    {'Contex type' => 'text/plain'}
+  def handle_request(path, query)
+    if path == "/time"
+      format_handler(query)
+    else
+      path_not_allowed(path)
+    end
   end
 
-  def body
-    ["Welcone aboard\n"]
+  def format_handler(query)
+    response = TimeFormatter.new(query)
+    response.call
+    if response.success?
+      send(200, response.time)
+    else
+      send(404, "Unknown time format #{response.false_result}")
+    end
+  end
+
+  def path_not_allowed(path)
+    send(400, "Path not allowed: #{path}")
   end
 end
