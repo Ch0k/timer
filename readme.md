@@ -17,3 +17,6 @@ URL GET /time
     Если неизвестных форматов несколько, все они должны быть перечислены в теле ответа, например: "Unknown time format [epoch, age]"
     При запросе на любой другой URL необходимо возвращать ответ с кодом статуса 404
 #Time.now.strftime "%Y-%d-%m %H:%M:%S %z"
+    #hash = Hash[format.collect { |item| [item, ""] } ]
+    #pp hash
+    #Time.now.strftime "%Y-%d-%m %H:%M:%S %z"
