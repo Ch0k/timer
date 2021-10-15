@@ -17,11 +17,11 @@ class TimeFormatter
     time_params = @query.split("%2C")
     @false_result = time_params - FORMAT.keys 
     if @false_result.empty?
-      @string_array = []
+      @time_array = []
       result = time_params & FORMAT.keys
       FORMAT.each do |key,val|
         if result.include?(key)
-          @string_array << val
+          @time_array << val
         end
       end
     end
@@ -32,7 +32,7 @@ class TimeFormatter
   end
 
   def time_content
-    @string_array.join(' ')
+    @time_array.join(' ')
   end
 
 end
